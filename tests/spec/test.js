@@ -21,6 +21,9 @@ if (typeof module === 'object' && module.exports) {
   format = returnExports;
 }
 
+var hasSymbolSupport =module.exports = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
+var itHasSymbolSupport = hasSymbolSupport ? it : xit,
+
 describe('format', function () {
   it('is a function', function () {
     expect(typeof format).toBe('function');
@@ -44,7 +47,7 @@ describe('format', function () {
     expect(format('foo', 'bar', 'baz')).toBe('foo bar baz');
   });
 
-  it('Symbol', function () {
+  itHasSymbolSupport('Symbol', function () {
     var symbol = Symbol('foo');
 
     // ES6 Symbol handling
