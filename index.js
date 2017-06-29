@@ -26,7 +26,7 @@
  *
  * Requires ES3 or above.
  *
- * @version 1.0.1
+ * @version 1.1.0
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
@@ -37,6 +37,7 @@
 
 var inspect = require('inspect-x');
 var JSON3 = require('json3');
+var safeToString = require('safe-to-string-x');
 
 var CIRCULAR_ERROR_MESSAGE;
 var tryStringify = function _tryStringify(arg) {
@@ -129,7 +130,7 @@ var format = function _format(f) {
           str += f.slice(lastPos, i);
         }
 
-        str += String(arguments[a]);
+        str += safeToString(arguments[a]);
         a += 1;
         // eslint-disable-next-line no-restricted-syntax
         break;
