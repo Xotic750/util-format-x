@@ -1,32 +1,6 @@
 /**
- * @file
- * <a href="https://travis-ci.org/Xotic750/util-format-x"
- * title="Travis status">
- * <img
- * src="https://travis-ci.org/Xotic750/util-format-x.svg?branch=master"
- * alt="Travis status" height="18">
- * </a>
- * <a href="https://david-dm.org/Xotic750/util-format-x"
- * title="Dependency status">
- * <img src="https://david-dm.org/Xotic750/util-format-x.svg"
- * alt="Dependency status" height="18"/>
- * </a>
- * <a
- * href="https://david-dm.org/Xotic750/util-format-x#info=devDependencies"
- * title="devDependency status">
- * <img src="https://david-dm.org/Xotic750/util-format-x/dev-status.svg"
- * alt="devDependency status" height="18"/>
- * </a>
- * <a href="https://badge.fury.io/js/util-format-x" title="npm version">
- * <img src="https://badge.fury.io/js/util-format-x.svg"
- * alt="npm version" height="18">
- * </a>
- *
- * An implementation of node's util.format()..
- *
- * Requires ES3 or above.
- *
- * @version 1.1.0
+ * @file An implementation of node's util.format
+ * @version 1.2.0
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
  * @license {@link <https://opensource.org/licenses/MIT> MIT}
@@ -38,6 +12,7 @@
 var inspect = require('inspect-x');
 var JSON3 = require('json3');
 var safeToString = require('safe-to-string-x');
+var isNull = require('lodash.isnull');
 
 var CIRCULAR_ERROR_MESSAGE;
 var tryStringify = function _tryStringify(arg) {
@@ -67,9 +42,10 @@ var tryStringify = function _tryStringify(arg) {
 var format = function _format(f) {
   if (typeof f !== 'string') {
     var objects = new Array(arguments.length);
-    for (var index = 0; index < arguments.length; index++) {
+    for (var index = 0; index < arguments.length; index += 1) {
       objects[index] = inspect(arguments[index]);
     }
+
     return objects.join(' ');
   }
 
@@ -173,7 +149,7 @@ var format = function _format(f) {
     var x = arguments[a];
     a += 1;
 
-    if (x === null || (typeof x !== 'object' && typeof x !== 'symbol')) {
+    if (isNull(x) || (typeof x !== 'object' && typeof x !== 'symbol')) {
       str += ' ' + x;
     } else {
       str += ' ' + inspect(x);
@@ -198,9 +174,9 @@ var format = function _format(f) {
  * %j - JSON. Replaced with the string '[Circular]' if the argument contains circular references.
  * %% - single percent sign ('%'). This does not consume an argument.
  *
- * @param {string} f Template.
- * @param {*} [...args] Values.
- * @return {*} The target.
+ * @param {string} f - Template.
+ * @param {*} [...args] - Values.
+ * @returns {*} The target.
  * @example
  * var format = require('util-format-x');
  *
