@@ -1,5 +1,5 @@
 /**
- * @file An implementation of node's util.format
+ * @file An implementation of node's util.format.
  * @version 1.3.0
  * @author Xotic750 <Xotic750@gmail.com>
  * @copyright  Xotic750
@@ -7,22 +7,20 @@
  * @module util-format-x
  */
 
-'use strict';
+const inspect = require('inspect-x');
+const JSON3 = require('json3');
+const safeToString = require('safe-to-string-x');
+const isNull = require('lodash.isnull');
 
-var inspect = require('inspect-x');
-var JSON3 = require('json3');
-var safeToString = require('safe-to-string-x');
-var isNull = require('lodash.isnull');
-
-var CIRCULAR_ERROR_MESSAGE;
-var tryStringify = function _tryStringify(arg) {
+let CIRCULAR_ERROR_MESSAGE;
+const tryStringify = function _tryStringify(arg) {
   try {
     return JSON3.stringify(arg);
   } catch (err) {
     // Populate the circular error message lazily
     if (!CIRCULAR_ERROR_MESSAGE) {
       try {
-        var a = {};
+        const a = {};
         a.a = a;
         JSON3.stringify(a);
       } catch (e) {
@@ -39,10 +37,10 @@ var tryStringify = function _tryStringify(arg) {
 };
 
 // eslint-disable-next-line complexity
-var format = function _format(f) {
+const format = function _format(f) {
   if (typeof f !== 'string') {
-    var objects = new Array(arguments.length);
-    for (var index = 0; index < arguments.length; index += 1) {
+    const objects = new Array(arguments.length);
+    for (let index = 0; index < arguments.length; index += 1) {
       objects[index] = inspect(arguments[index]);
     }
 
@@ -53,81 +51,88 @@ var format = function _format(f) {
     return f;
   }
 
-  var str = '';
-  var a = 1;
-  var lastPos = 0;
-  for (var i = 0; i < f.length;) {
-    if (f.charCodeAt(i) === 37/* '%'*/ && i + 1 < f.length) {
-      if (f.charCodeAt(i + 1) !== 37/* '%'*/ && a >= arguments.length) {
+  let str = '';
+  let a = 1;
+  let lastPos = 0;
+  for (let i = 0; i < f.length; ) {
+    if (f.charCodeAt(i) === 37 /* '%' */ && i + 1 < f.length) {
+      if (f.charCodeAt(i + 1) !== 37 /* '%' */ && a >= arguments.length) {
         i += 1;
         // eslint-disable-next-line no-continue
         continue; // eslint-disable-line no-restricted-syntax
       }
 
       switch (f.charCodeAt(i + 1)) {
-      case 100: // 'd'
-        if (lastPos < i) {
-          str += f.slice(lastPos, i);
-        }
+        case 100: // 'd'
+          if (lastPos < i) {
+            str += f.slice(lastPos, i);
+          }
 
-        str += Number(arguments[a]);
-        a += 1;
-        // eslint-disable-next-line no-restricted-syntax
-        break;
-      case 105: // 'i'
-        if (lastPos < i) {
-          str += f.slice(lastPos, i);
-        }
+          str += Number(arguments[a]);
+          a += 1;
+          // eslint-disable-next-line no-restricted-syntax
+          break;
 
-        str += parseInt(arguments[a], 10);
-        a += 1;
-        // eslint-disable-next-line no-restricted-syntax
-        break;
-      case 102: // 'f'
-        if (lastPos < i) {
-          str += f.slice(lastPos, i);
-        }
+        case 105: // 'i'
+          if (lastPos < i) {
+            str += f.slice(lastPos, i);
+          }
 
-        str += parseFloat(arguments[a]);
-        a += 1;
-        // eslint-disable-next-line no-restricted-syntax
-        break;
-      case 106: // 'j'
-        if (lastPos < i) {
-          str += f.slice(lastPos, i);
-        }
+          str += parseInt(arguments[a], 10);
+          a += 1;
+          // eslint-disable-next-line no-restricted-syntax
+          break;
 
-        str += tryStringify(arguments[a]);
-        a += 1;
-        // eslint-disable-next-line no-restricted-syntax
-        break;
-      case 115: // 's'
-        if (lastPos < i) {
-          str += f.slice(lastPos, i);
-        }
+        case 102: // 'f'
+          if (lastPos < i) {
+            str += f.slice(lastPos, i);
+          }
 
-        str += safeToString(arguments[a]);
-        a += 1;
-        // eslint-disable-next-line no-restricted-syntax
-        break;
-      case 37: // '%'
-        if (lastPos < i) {
-          str += f.slice(lastPos, i);
-        }
+          str += parseFloat(arguments[a]);
+          a += 1;
+          // eslint-disable-next-line no-restricted-syntax
+          break;
 
-        str += '%';
-        // eslint-disable-next-line no-restricted-syntax
-        break;
-      default: // any other character is not a correct placeholder
-        if (lastPos < i) {
-          str += f.slice(lastPos, i);
-        }
+        case 106: // 'j'
+          if (lastPos < i) {
+            str += f.slice(lastPos, i);
+          }
 
-        str += '%';
-        i += 1;
-        lastPos = i;
-        // eslint-disable-next-line no-continue
-        continue; // eslint-disable-line no-restricted-syntax
+          str += tryStringify(arguments[a]);
+          a += 1;
+          // eslint-disable-next-line no-restricted-syntax
+          break;
+
+        case 115: // 's'
+          if (lastPos < i) {
+            str += f.slice(lastPos, i);
+          }
+
+          str += safeToString(arguments[a]);
+          a += 1;
+          // eslint-disable-next-line no-restricted-syntax
+          break;
+
+        case 37: // '%'
+          if (lastPos < i) {
+            str += f.slice(lastPos, i);
+          }
+
+          str += '%';
+          // eslint-disable-next-line no-restricted-syntax
+          break;
+
+        default:
+          // any other character is not a correct placeholder
+          if (lastPos < i) {
+            str += f.slice(lastPos, i);
+          }
+
+          str += '%';
+          i += 1;
+          lastPos = i;
+          // eslint-disable-next-line no-continue
+          continue; // eslint-disable-line no-restricted-syntax
       }
 
       i += 2;
@@ -146,13 +151,13 @@ var format = function _format(f) {
   }
 
   while (a < arguments.length) {
-    var x = arguments[a];
+    const x = arguments[a];
     a += 1;
 
     if (isNull(x) || (typeof x !== 'object' && typeof x !== 'symbol')) {
-      str += ' ' + x;
+      str += ` ${x}`;
     } else {
-      str += ' ' + inspect(x);
+      str += ` ${inspect(x)}`;
     }
   }
 

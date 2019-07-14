@@ -1,17 +1,19 @@
-'use strict';
+let format;
 
-var format;
 if (typeof module === 'object' && module.exports) {
   require('es5-shim');
   require('es5-shim/es5-sham');
+
   if (typeof JSON === 'undefined') {
     JSON = {};
   }
+
   require('json3').runInContext(null, JSON);
   require('es6-shim');
-  var es7 = require('es7-shim');
-  Object.keys(es7).forEach(function (key) {
-    var obj = es7[key];
+  const es7 = require('es7-shim');
+  Object.keys(es7).forEach(function(key) {
+    const obj = es7[key];
+
     if (typeof obj.shim === 'function') {
       obj.shim();
     }
@@ -21,46 +23,46 @@ if (typeof module === 'object' && module.exports) {
   format = returnExports;
 }
 
-var hasSymbolSupport = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
-var itHasSymbolSupport = hasSymbolSupport ? it : xit;
+const hasSymbolSupport = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
+const itHasSymbolSupport = hasSymbolSupport ? it : xit;
 
-describe('format', function () {
-  it('is a function', function () {
+describe('format', function() {
+  it('is a function', function() {
     expect(typeof format).toBe('function');
   });
 
-  it('Basic', function () {
+  it('basic', function() {
     expect(format()).toBe('');
     expect(format('')).toBe('');
     expect(format([])).toBe('[]');
     expect(format([0])).toBe('[ 0 ]');
     expect(format({})).toBe('{}');
-    expect(format({ foo: 42 })).toBe('{ foo: 42 }');
+    expect(format({foo: 42})).toBe('{ foo: 42 }');
     expect(format(null)).toBe('null');
     expect(format(true)).toBe('true');
     expect(format(false)).toBe('false');
     expect(format('test')).toBe('test');
   });
 
-  it('Console', function () {
+  it('console', function() {
     // CHECKME this is for console.log() compatibility - but is it *right*?
     expect(format('foo', 'bar', 'baz')).toBe('foo bar baz');
   });
 
-  itHasSymbolSupport('Symbol', function () {
-    var symbol = Symbol('foo');
+  itHasSymbolSupport('Symbol', function() {
+    const symbol = Symbol('foo');
 
     // ES6 Symbol handling
     expect(format(symbol)).toBe('Symbol(foo)');
     expect(format('foo', symbol)).toBe('foo Symbol(foo)');
     expect(format('%s', symbol)).toBe('Symbol(foo)');
     expect(format('%j', symbol)).toBe('undefined');
-    expect(function () {
+    expect(function() {
       format('%d', symbol);
     }).toThrow();
   });
 
-  it('Number', function () {
+  it('number', function() {
     // Number format specifier
     expect(format('%d')).toBe('%d');
     expect(format('%d', 42.0)).toBe('42');
@@ -74,7 +76,7 @@ describe('format', function () {
     expect(format('%d %d', 42)).toBe('42 %d');
   });
 
-  it('Integer', function () {
+  it('integer', function() {
     // Integer format specifier
     expect(format('%i')).toBe('%i');
     expect(format('%i', 42.0)).toBe('42');
@@ -88,8 +90,8 @@ describe('format', function () {
     expect(format('%i %i', 42)).toBe('42 %i');
   });
 
-  it('Float', function () {
-  // Float format specifier
+  it('float', function() {
+    // Float format specifier
     expect(format('%f')).toBe('%f');
     expect(format('%f', 42.0)).toBe('42');
     expect(format('%f', 42)).toBe('42');
@@ -103,7 +105,7 @@ describe('format', function () {
     expect(format('%f %f', 42)).toBe('42 %f');
   });
 
-  it('String', function () {
+  it('string', function() {
     // String format specifier
     expect(format('%s')).toBe('%s');
     expect(format('%s', undefined)).toBe('undefined');
@@ -114,7 +116,7 @@ describe('format', function () {
     expect(format('%s %s', 42)).toBe('42 %s');
   });
 
-  it('JSON', function () {
+  it('jSON', function() {
     // JSON format specifier
     expect(format('%j')).toBe('%j');
     expect(format('%j', 42)).toBe('42');
@@ -123,7 +125,7 @@ describe('format', function () {
     expect(format('%j %j', 42)).toBe('42 %j');
   });
 
-  it('Various', function () {
+  it('various', function() {
     // Various format specifiers
     expect(format('%%s%s', 'foo')).toBe('%sfoo');
     expect(format('%s:%s')).toBe('%s:%s');
@@ -150,23 +152,23 @@ describe('format', function () {
     expect(format('o: %j, a: %j')).toBe('o: %j, a: %j');
   });
 
-  it('Invalid', function () {
+  it('invalid', function() {
     // Invalid format specifiers
     expect(format('a% b', 'x')).toBe('a% b x');
     expect(format('percent: %d%, fraction: %d', 10, 0.1)).toBe('percent: 10%, fraction: 0.1');
     expect(format('abc%', 1)).toBe('abc% 1');
 
-    var o = {};
+    const o = {};
     o.o = o;
     expect(format('%j', o)).toBe('[Circular]');
 
-    var p = {
-      toJSON: function () {
+    const p = {
+      toJSON() {
         throw new Error('Not a circular object but still not serializable');
-      }
+      },
     };
 
-    expect(function () {
+    expect(function() {
       format('%j', p);
     }).toThrow(); // /^Error: Not a circular object but still not serializable$/
   });
