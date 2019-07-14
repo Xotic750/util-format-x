@@ -9,7 +9,7 @@
 
 const inspect = require('inspect-x');
 const JSON3 = require('json3');
-const safeToString = require('safe-to-string-x');
+const safeToString = require('to-string-symbols-supported-x');
 const isNull = require('lodash.isnull');
 
 let CIRCULAR_ERROR_MESSAGE;
