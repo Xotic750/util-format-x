@@ -51,7 +51,7 @@
     "inspect-x": "^2.0.0",
     "json3": "^3.3.3",
     "lodash.isnull": "^3.0.0",
-    "to-string-symbols-supported-x": "^2.0.5"
+    "to-string-symbols-supported-x": "^2.0.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",
