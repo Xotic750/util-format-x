@@ -1,12 +1,3 @@
-/**
- * @file An implementation of node's util.format.
- * @version 1.3.0
- * @author Xotic750 <Xotic750@gmail.com>
- * @copyright  Xotic750
- * @license {@link <https://opensource.org/licenses/MIT> MIT}
- * @module util-format-x
- */
-
 import inspect from 'inspect-x';
 
 import JSON3 from 'json3';
@@ -183,26 +174,5 @@ const format = function _format(f) {
  * @param {string} f - Template.
  * @param {*} [...args] - Values.
  * @returns {*} The target.
- * @example
- * var format = require('util-format-x');
- *
- * // If the placeholder does not have a corresponding argument,
- * // the placeholder is not replaced.
- * format('%s:%s', 'foo'); // Returns: 'foo:%s'
- *
- * // If there are more arguments passed to the format() method than the number
- * // of placeholders, the extra arguments are coerced into strings (for objects
- * // and symbols, inspect() is used) then concatenated to the returned
- * // string, each delimited by a space.
- * format('%s:%s', 'foo', 'bar', 'baz'); // 'foo:bar baz'
- *
- * // If the first argument is not a format string then format() returns a
- * // string that is the concatenation of all arguments separated by spaces.
- * // Each argument is converted to a string using inspect().
- * format(1, 2, 3); // '1 2 3'
- *
- * // If only one argument is passed to format(), it is returned as it is
- * //without any formatting.
- * format('%% %s'); // '%% %s'
  */
 export default format;
