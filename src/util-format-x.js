@@ -7,10 +7,11 @@
  * @module util-format-x
  */
 
-const inspect = require('inspect-x');
-const JSON3 = require('json3');
-const safeToString = require('to-string-symbols-supported-x');
-const isNull = require('lodash.isnull');
+import inspect from 'inspect-x';
+
+import JSON3 from 'json3';
+import safeToString from 'to-string-symbols-supported-x';
+import isNull from 'lodash.isnull';
 
 let CIRCULAR_ERROR_MESSAGE;
 const tryStringify = function _tryStringify(arg) {
@@ -204,4 +205,4 @@ const format = function _format(f) {
  * //without any formatting.
  * format('%% %s'); // '%% %s'
  */
-module.exports = format;
+export default format;

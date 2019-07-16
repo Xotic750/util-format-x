@@ -28,10 +28,12 @@ const itHasSymbolSupport = hasSymbolSupport ? it : xit;
 
 describe('format', function() {
   it('is a function', function() {
+    expect.assertions(1);
     expect(typeof format).toBe('function');
   });
 
   it('basic', function() {
+    expect.assertions(1);
     expect(format()).toBe('');
     expect(format('')).toBe('');
     expect(format([])).toBe('[]');
@@ -45,7 +47,7 @@ describe('format', function() {
   });
 
   it('console', function() {
-    // CHECKME this is for console.log() compatibility - but is it *right*?
+    expect.assertions(1); // CHECKME this is for console.log() compatibility - but is it *right*?
     expect(format('foo', 'bar', 'baz')).toBe('foo bar baz');
   });
 
@@ -59,11 +61,11 @@ describe('format', function() {
     expect(format('%j', symbol)).toBe('undefined');
     expect(function() {
       format('%d', symbol);
-    }).toThrow();
+    }).toThrowErrorMatchingSnapshot();
   });
 
   it('number', function() {
-    // Number format specifier
+    expect.assertions(1); // Number format specifier
     expect(format('%d')).toBe('%d');
     expect(format('%d', 42.0)).toBe('42');
     expect(format('%d', 42)).toBe('42');
@@ -77,7 +79,7 @@ describe('format', function() {
   });
 
   it('integer', function() {
-    // Integer format specifier
+    expect.assertions(1); // Integer format specifier
     expect(format('%i')).toBe('%i');
     expect(format('%i', 42.0)).toBe('42');
     expect(format('%i', 42)).toBe('42');
@@ -91,7 +93,7 @@ describe('format', function() {
   });
 
   it('float', function() {
-    // Float format specifier
+    expect.assertions(1); // Float format specifier
     expect(format('%f')).toBe('%f');
     expect(format('%f', 42.0)).toBe('42');
     expect(format('%f', 42)).toBe('42');
@@ -106,7 +108,7 @@ describe('format', function() {
   });
 
   it('string', function() {
-    // String format specifier
+    expect.assertions(1); // String format specifier
     expect(format('%s')).toBe('%s');
     expect(format('%s', undefined)).toBe('undefined');
     expect(format('%s', 'foo')).toBe('foo');
@@ -117,7 +119,7 @@ describe('format', function() {
   });
 
   it('jSON', function() {
-    // JSON format specifier
+    expect.assertions(1); // JSON format specifier
     expect(format('%j')).toBe('%j');
     expect(format('%j', 42)).toBe('42');
     expect(format('%j', '42')).toBe('"42"');
@@ -126,7 +128,7 @@ describe('format', function() {
   });
 
   it('various', function() {
-    // Various format specifiers
+    expect.assertions(1); // Various format specifiers
     expect(format('%%s%s', 'foo')).toBe('%sfoo');
     expect(format('%s:%s')).toBe('%s:%s');
     expect(format('%s:%s', undefined)).toBe('undefined:%s');
@@ -153,7 +155,7 @@ describe('format', function() {
   });
 
   it('invalid', function() {
-    // Invalid format specifiers
+    expect.assertions(1); // Invalid format specifiers
     expect(format('a% b', 'x')).toBe('a% b x');
     expect(format('percent: %d%, fraction: %d', 10, 0.1)).toBe('percent: 10%, fraction: 0.1');
     expect(format('abc%', 1)).toBe('abc% 1');
@@ -170,7 +172,7 @@ describe('format', function() {
 
     expect(function() {
       format('%j', p);
-    }).toThrow(); // /^Error: Not a circular object but still not serializable$/
+    }).toThrowErrorMatchingSnapshot(); // /^Error: Not a circular object but still not serializable$/
   });
 
   /*
