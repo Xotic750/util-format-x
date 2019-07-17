@@ -50,7 +50,6 @@
   "dependencies": {
     "inspect-x": "^2.0.0",
     "json3": "^3.3.3",
-    "lodash.isnull": "^3.0.0",
     "to-string-symbols-supported-x": "^2.0.8"
   },
   "devDependencies": {
