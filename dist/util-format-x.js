@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-18T07:34:56.860Z",
+  "date": "2019-07-18T23:00:03.061Z",
   "describe": "",
   "description": "An implementation of node's util.format",
   "file": "util-format-x.js",
-  "hash": "3c86fa8776f468f024d5",
+  "hash": "d0eed64a88e3cc2d08a9",
   "license": "MIT",
-  "version": "2.0.0"
+  "version": "2.0.1"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -4183,11 +4183,11 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   var descriptor = {};
 
   if (has_own_property_x_esm(object, 'enumerable')) {
-    descriptor.enumerable = Boolean(object.enumerable);
+    descriptor.enumerable = object_define_property_x_esm_castBoolean(object.enumerable);
   }
 
   if (has_own_property_x_esm(object, 'configurable')) {
-    descriptor.configurable = Boolean(object.configurable);
+    descriptor.configurable = object_define_property_x_esm_castBoolean(object.configurable);
   }
 
   if (has_own_property_x_esm(object, 'value')) {
@@ -4195,7 +4195,7 @@ var toPropertyDescriptor = function _toPropertyDescriptor(desc) {
   }
 
   if (has_own_property_x_esm(object, 'writable')) {
-    descriptor.writable = Boolean(object.writable);
+    descriptor.writable = object_define_property_x_esm_castBoolean(object.writable);
   }
 
   if (has_own_property_x_esm(object, 'get')) {

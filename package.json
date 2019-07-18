@@ -1,6 +1,6 @@
 {
   "name": "util-format-x",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "An implementation of node's util.format",
   "homepage": "https://github.com/Xotic750/util-format-x",
   "author": {
@@ -48,9 +48,9 @@
     "url": "https://github.com/Xotic750/util-format-x/issues"
   },
   "dependencies": {
-    "inspect-x": "^3.0.0",
+    "inspect-x": "^3.0.1",
     "json3": "^3.3.3",
-    "to-string-symbols-supported-x": "^2.0.9"
+    "to-string-symbols-supported-x": "^2.0.11"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
