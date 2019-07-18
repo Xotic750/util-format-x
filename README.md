@@ -21,15 +21,17 @@
 <a name="module_util-format-x"></a>
 
 ## util-format-x
+
 An implementation of node's util.format
 
 **Version**: 1.3.0  
 **Author**: Xotic750 <Xotic750@gmail.com>  
-**License**: [MIT](&lt;https://opensource.org/licenses/MIT&gt;)  
+**License**: [MIT](https://opensource.org/licenses/MIT)  
 **Copyright**: Xotic750  
 <a name="exp_module_util-format-x--module.exports"></a>
 
 ### `module.exports` ⇒ <code>\*</code> ⏏
+
 The format() method returns a formatted string using the first argument as a
 printf-like format.
 
@@ -45,16 +47,17 @@ corresponding argument. Supported placeholders are:
 %% - single percent sign ('%'). This does not consume an argument.
 
 **Kind**: Exported member  
-**Returns**: <code>\*</code> - The target.  
+**Returns**: <code>\*</code> - The target.
 
-| Param | Type | Description |
-| --- | --- | --- |
-| f | <code>string</code> | Template. |
-| [...args] | <code>\*</code> | Values. |
+| Param     | Type                | Description |
+| --------- | ------------------- | ----------- |
+| f         | <code>string</code> | Template.   |
+| [...args] | <code>\*</code>     | Values.     |
 
-**Example**  
+**Example**
+
 ```js
-var format = require('util-format-x');
+import format from 'util-format-x';
 
 // If the placeholder does not have a corresponding argument,
 // the placeholder is not replaced.

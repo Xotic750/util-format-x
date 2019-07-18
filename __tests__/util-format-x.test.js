@@ -1,4 +1,4 @@
-let format;
+import format from '../src/util-format-x';
 
 const hasSymbolSupport = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
 const itHasSymbolSupport = hasSymbolSupport ? it : xit;
@@ -10,7 +10,7 @@ describe('format', function() {
   });
 
   it('basic', function() {
-    expect.assertions(1);
+    expect.assertions(10);
     expect(format()).toBe('');
     expect(format('')).toBe('');
     expect(format([])).toBe('[]');
@@ -42,7 +42,7 @@ describe('format', function() {
   });
 
   it('number', function() {
-    expect.assertions(1); // Number format specifier
+    expect.assertions(10); // Number format specifier
     expect(format('%d')).toBe('%d');
     expect(format('%d', 42.0)).toBe('42');
     expect(format('%d', 42)).toBe('42');
@@ -56,7 +56,7 @@ describe('format', function() {
   });
 
   it('integer', function() {
-    expect.assertions(1); // Integer format specifier
+    expect.assertions(10); // Integer format specifier
     expect(format('%i')).toBe('%i');
     expect(format('%i', 42.0)).toBe('42');
     expect(format('%i', 42)).toBe('42');
@@ -70,7 +70,7 @@ describe('format', function() {
   });
 
   it('float', function() {
-    expect.assertions(1); // Float format specifier
+    expect.assertions(11); // Float format specifier
     expect(format('%f')).toBe('%f');
     expect(format('%f', 42.0)).toBe('42');
     expect(format('%f', 42)).toBe('42');
@@ -85,7 +85,7 @@ describe('format', function() {
   });
 
   it('string', function() {
-    expect.assertions(1); // String format specifier
+    expect.assertions(7); // String format specifier
     expect(format('%s')).toBe('%s');
     expect(format('%s', undefined)).toBe('undefined');
     expect(format('%s', 'foo')).toBe('foo');
@@ -96,7 +96,7 @@ describe('format', function() {
   });
 
   it('jSON', function() {
-    expect.assertions(1); // JSON format specifier
+    expect.assertions(5); // JSON format specifier
     expect(format('%j')).toBe('%j');
     expect(format('%j', 42)).toBe('42');
     expect(format('%j', '42')).toBe('"42"');
@@ -105,7 +105,7 @@ describe('format', function() {
   });
 
   it('various', function() {
-    expect.assertions(1); // Various format specifiers
+    expect.assertions(23); // Various format specifiers
     expect(format('%%s%s', 'foo')).toBe('%sfoo');
     expect(format('%s:%s')).toBe('%s:%s');
     expect(format('%s:%s', undefined)).toBe('undefined:%s');
@@ -132,7 +132,7 @@ describe('format', function() {
   });
 
   it('invalid', function() {
-    expect.assertions(1); // Invalid format specifiers
+    expect.assertions(5); // Invalid format specifiers
     expect(format('a% b', 'x')).toBe('a% b x');
     expect(format('percent: %d%, fraction: %d', 10, 0.1)).toBe('percent: 10%, fraction: 0.1');
     expect(format('abc%', 1)).toBe('abc% 1');

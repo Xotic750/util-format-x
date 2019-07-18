@@ -1,22 +1,24 @@
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 import inspect from 'inspect-x';
-
-import {stringify} from 'json3';
+import { stringify } from 'json3';
 import safeToString from 'to-string-symbols-supported-x';
-
 /** @type {ArrayConstructor} */
-const ArrayCtr = [].constructor;
-/** @type {NumberConstructor} */
-const castNumber = (0).constructor;
 
-let CIRCULAR_ERROR_MESSAGE;
-const tryStringify = function _tryStringify(arg) {
+var ArrayCtr = [].constructor;
+/** @type {NumberConstructor} */
+
+var castNumber = 0 .constructor;
+var CIRCULAR_ERROR_MESSAGE;
+
+var tryStringify = function _tryStringify(arg) {
   try {
     return stringify(arg);
   } catch (err) {
     // Populate the circular error message lazily
     if (!CIRCULAR_ERROR_MESSAGE) {
       try {
-        const a = {};
+        var a = {};
         a.a = a;
         stringify(a);
       } catch (e) {
@@ -30,10 +32,9 @@ const tryStringify = function _tryStringify(arg) {
 
     throw err;
   }
-};
-
-// eslint-disable jsdoc/check-param-names
+}; // eslint-disable jsdoc/check-param-names
 // noinspection JSCommentMatchesSignature
+
 /**
  * The format() method returns a formatted string using the first argument as a
  * printf-like format.
@@ -54,10 +55,13 @@ const tryStringify = function _tryStringify(arg) {
  * @returns {*} The target.
  */
 // eslint-enable jsdoc/check-param-names
-const format = function _format(f) {
+
+
+var format = function _format(f) {
   if (typeof f !== 'string') {
-    const objects = new ArrayCtr(arguments.length);
-    for (let index = 0; index < arguments.length; index += 1) {
+    var objects = new ArrayCtr(arguments.length);
+
+    for (var index = 0; index < arguments.length; index += 1) {
       /* eslint-disable-next-line prefer-rest-params */
       objects[index] = inspect(arguments[index]);
     }
@@ -69,69 +73,86 @@ const format = function _format(f) {
     return f;
   }
 
-  let str = '';
-  let a = 1;
-  let lastPos = 0;
-  for (let i = 0; i < f.length; ) {
-    if (f.charCodeAt(i) === 37 /* '%' */ && i + 1 < f.length) {
-      if (f.charCodeAt(i + 1) !== 37 /* '%' */ && a >= arguments.length) {
+  var str = '';
+  var a = 1;
+  var lastPos = 0;
+
+  for (var i = 0; i < f.length;) {
+    if (f.charCodeAt(i) === 37
+    /* '%' */
+    && i + 1 < f.length) {
+      if (f.charCodeAt(i + 1) !== 37
+      /* '%' */
+      && a >= arguments.length) {
         i += 1;
         /* eslint-disable-next-line no-continue */
+
         continue;
       }
 
       switch (f.charCodeAt(i + 1)) {
-        case 100: // 'd'
+        case 100:
+          // 'd'
           if (lastPos < i) {
             str += f.slice(lastPos, i);
           }
-
           /* eslint-disable-next-line prefer-rest-params */
+
+
           str += castNumber(arguments[a]);
           a += 1;
           break;
 
-        case 105: // 'i'
+        case 105:
+          // 'i'
           if (lastPos < i) {
             str += f.slice(lastPos, i);
           }
-
           /* eslint-disable-next-line prefer-rest-params */
+
+
           str += parseInt(arguments[a], 10);
           a += 1;
           break;
 
-        case 102: // 'f'
+        case 102:
+          // 'f'
           if (lastPos < i) {
             str += f.slice(lastPos, i);
           }
-
           /* eslint-disable-next-line prefer-rest-params */
+
+
           str += parseFloat(arguments[a]);
           a += 1;
           break;
 
-        case 106: // 'j'
+        case 106:
+          // 'j'
           if (lastPos < i) {
             str += f.slice(lastPos, i);
           }
-
           /* eslint-disable-next-line prefer-rest-params */
+
+
           str += tryStringify(arguments[a]);
           a += 1;
           break;
 
-        case 115: // 's'
+        case 115:
+          // 's'
           if (lastPos < i) {
             str += f.slice(lastPos, i);
           }
-
           /* eslint-disable-next-line prefer-rest-params */
+
+
           str += safeToString(arguments[a]);
           a += 1;
           break;
 
-        case 37: // '%'
+        case 37:
+          // '%'
           if (lastPos < i) {
             str += f.slice(lastPos, i);
           }
@@ -149,12 +170,14 @@ const format = function _format(f) {
           i += 1;
           lastPos = i;
           /* eslint-disable-next-line no-continue */
+
           continue;
       }
 
       i += 2;
       lastPos = i;
       /* eslint-disable-next-line no-continue */
+
       continue;
     }
 
@@ -169,13 +192,13 @@ const format = function _format(f) {
 
   while (a < arguments.length) {
     /* eslint-disable-next-line prefer-rest-params */
-    const x = arguments[a];
+    var x = arguments[a];
     a += 1;
 
-    if (x === null || (typeof x !== 'object' && typeof x !== 'symbol')) {
-      str += ` ${x}`;
+    if (x === null || _typeof(x) !== 'object' && _typeof(x) !== 'symbol') {
+      str += " ".concat(x);
     } else {
-      str += ` ${inspect(x)}`;
+      str += " ".concat(inspect(x));
     }
   }
 
@@ -183,3 +206,5 @@ const format = function _format(f) {
 };
 
 export default format;
+
+//# sourceMappingURL=util-format-x.esm.js.map

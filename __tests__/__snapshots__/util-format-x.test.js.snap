@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`format Symbol 1`] = `"Cannot convert a Symbol value to a number"`;
+
+exports[`format invalid 1`] = `"Not a circular object but still not serializable"`;
