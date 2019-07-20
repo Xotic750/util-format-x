@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-20T14:46:31.622Z",
+  "date": "2019-07-20T15:18:29.622Z",
   "describe": "",
-  "description": "An implementation of node's util.format",
+  "description": "An implementation of node's util.format and util.formatWithOptions",
   "file": "util-format-x.js",
-  "hash": "4af82f8d09fea087aec4",
+  "hash": "4b9bd9dd53b07570b409",
   "license": "MIT",
-  "version": "2.0.2"
+  "version": "3.0.0"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -20,7 +20,7 @@
 		exports["utilFormatX"] = factory();
 	else
 		root["utilFormatX"] = factory();
-})((function() {
+})((function () {
   'use strict';
 
   if (typeof self !== 'undefined') {
