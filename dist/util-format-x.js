@@ -2,13 +2,13 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-20T15:18:29.622Z",
+  "date": "2019-07-20T20:03:33.924Z",
   "describe": "",
   "description": "An implementation of node's util.format and util.formatWithOptions",
   "file": "util-format-x.js",
-  "hash": "4b9bd9dd53b07570b409",
+  "hash": "c10f8e1abc8beb079e4d",
   "license": "MIT",
-  "version": "3.0.0"
+  "version": "3.0.1"
 }
 */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -9288,7 +9288,9 @@ if (object_create_x_esm_isWorking) {
     var getEmptyViaActiveX = function _getEmptyViaActiveX() {
       /* eslint-disable-next-line no-undef */
       var xDoc = new ActiveXObject('htmlfile');
-      xDoc.write('<script></script>');
+      /* eslint-disable-next-line no-useless-escape,prettier/prettier */
+
+      xDoc.write('<script><\/script>');
       xDoc.close(); // noinspection JSUnresolvedVariable
 
       var empty = xDoc.parentWindow.Object.prototype;
