@@ -1,7 +1,11 @@
-import format from '../src/util-format-x';
+import {format} from '../src/util-format-x';
 
 const hasSymbolSupport = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
 const itHasSymbolSupport = hasSymbolSupport ? it : xit;
+
+/* eslint-disable-next-line babel/new-cap,no-undef,valid-typeof */
+const hasBigIntSupport = typeof BigInt === 'function' && typeof BigInt(48) === 'bigint';
+const itHasBigIntlSupport = hasBigIntSupport ? it : xit;
 
 describe('format', function() {
   it('is a function', function() {
@@ -29,6 +33,7 @@ describe('format', function() {
   });
 
   itHasSymbolSupport('Symbol', function() {
+    expect.assertions(4);
     const symbol = Symbol('foo');
 
     // ES6 Symbol handling
@@ -36,9 +41,21 @@ describe('format', function() {
     expect(format('foo', symbol)).toBe('foo Symbol(foo)');
     expect(format('%s', symbol)).toBe('Symbol(foo)');
     expect(format('%j', symbol)).toBe('undefined');
-    expect(function() {
-      format('%d', symbol);
+    // expect(format('%d', symbol)).toBe('NaN');
+  });
+
+  itHasBigIntlSupport('BigInt', function() {
+    expect.assertions(5);
+    /* eslint-disable-next-line babel/new-cap,no-undef */
+    const bigint = BigInt(48);
+
+    expect(format(bigint)).toBe('BigInt {}');
+    expect(format('foo', bigint)).toBe('foo BigInt {}');
+    expect(format('%s', bigint)).toBe('48n');
+    expect(() => {
+      format('%j', bigint);
     }).toThrowErrorMatchingSnapshot();
+    expect(format('%d', bigint)).toBe('48n');
   });
 
   it('number', function() {
@@ -63,7 +80,7 @@ describe('format', function() {
     expect(format('%i', '42')).toBe('42');
     expect(format('%i', '42.0')).toBe('42');
     expect(format('%i', 1.5)).toBe('1');
-    expect(format('%i', -0.5)).toBe('0');
+    expect(format('%i', -0.5)).toBe('-0');
     expect(format('%i', '')).toBe('NaN');
     expect(format('%i %i', 42, 43)).toBe('42 43');
     expect(format('%i %i', 42)).toBe('42 %i');
@@ -141,6 +158,7 @@ describe('format', function() {
     o.o = o;
     expect(format('%j', o)).toBe('[Circular]');
 
+    // noinspection JSUnusedGlobalSymbols
     const p = {
       toJSON() {
         throw new Error('Not a circular object but still not serializable');

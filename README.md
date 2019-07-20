@@ -22,28 +22,39 @@
 
 ## util-format-x
 
-An implementation of node's util.format
+An implementation of node's util.format and util.formatWithOptions
 
-**Version**: 1.3.0  
-**Author**: Xotic750 <Xotic750@gmail.com>  
-**License**: [MIT](https://opensource.org/licenses/MIT)  
-**Copyright**: Xotic750  
-<a name="exp_module_util-format-x--module.exports"></a>
+- [util-format-x](#module_util-format-x)
+  - [`.format`](#module_util-format-x.format) ⇒ <code>boolean</code>
+  - [`.formatWithOptions`](#module_util-format-x.formatWithOptions) ⇒ <code>boolean</code>
 
-### `module.exports` ⇒ <code>\*</code> ⏏
+<a name="module_util-format-x.format"></a>
 
-The format() method returns a formatted string using the first argument as a
-printf-like format.
+### `util-format-x.format` ⇒ <code>string</code>
 
-The first argument is a string containing zero or more placeholder tokens.
-Each placeholder token is replaced with the converted value from the
-corresponding argument. Supported placeholders are:
+**See**: https://nodejs.org/api/assert.html
+
+The format() method returns a formatted string using the first argument as a printf-like format.
+
+The first argument is a string containing zero or more placeholder tokens. Each placeholder token is
+replaced with the converted value from the corresponding argument. Supported placeholders are:
 
 %s - String.
-%d - Number (integer or floating point value).
-%i - Integer.
+
+%d - Number (integer or floating point value) or BigInt.
+
+%i - Integer or BigInt.
+
 %f - Floating point value.
+
 %j - JSON. Replaced with the string '[Circular]' if the argument contains circular references.
+
+%o - Object. A string representation of an object with generic JavaScript object formatting. Similar to inspect() with
+options { showHidden: true, showProxy: true }. This will show the full object including non-enumerable properties and proxies.
+
+%O - Object. A string representation of an object with generic JavaScript object formatting. Similar to inspect() without options.
+This will show the full object not including non-enumerable properties and proxies.
+
 %% - single percent sign ('%'). This does not consume an argument.
 
 **Kind**: Exported member  
@@ -57,7 +68,7 @@ corresponding argument. Supported placeholders are:
 **Example**
 
 ```js
-import format from 'util-format-x';
+import {format} from 'util-format-x';
 
 // If the placeholder does not have a corresponding argument,
 // the placeholder is not replaced.
@@ -77,4 +88,20 @@ format(1, 2, 3); // '1 2 3'
 // If only one argument is passed to format(), it is returned as it is
 //without any formatting.
 format('%% %s'); // '%% %s'
+```
+
+<a name="module_util-format-x.formatWithOptions"></a>
+
+### `util-format-x.formatWithOptions` ⇒ <code>string</code>
+
+**See**: https://nodejs.org/api/assert.html
+
+This function is identical to format(), except in that it takes an inspectOptions argument which specifies options that are passed along to inspect().
+
+```js
+import {formatWithOptions} from 'util-format-x';
+
+formatWithOptions({colors: true}, 'See object %O', {foo: 42});
+// Returns 'See object { foo: 42 }', where `42` is colored as a number
+// when printed to a terminal.
 ```
