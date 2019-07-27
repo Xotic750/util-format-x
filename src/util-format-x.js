@@ -8,9 +8,8 @@ import arrayFilter from 'array-filter-x';
 import getOwnPropertyNames from 'get-own-property-names-x';
 import isSymbol from 'is-symbol';
 import isBigint from 'is-bigint';
+import toNumber from 'to-number-x';
 
-/** @type {NumberConstructor} */
-const castNumber = (0).constructor;
 const RX_NAMES = /^([A-Z][a-z]+)+$/;
 const rxTest = RX_NAMES.test;
 const EMPTY_STRING = '';
@@ -139,7 +138,7 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, ...a
                 } else if (isSymbol(tempNum)) {
                   tempStr = 'NaN';
                 } else {
-                  tempStr = formatNumber(stylizeNoColor, castNumber(tempNum));
+                  tempStr = formatNumber(stylizeNoColor, toNumber(tempNum));
                 }
               }
 

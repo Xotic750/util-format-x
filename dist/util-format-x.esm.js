@@ -16,9 +16,7 @@ import arrayFilter from 'array-filter-x';
 import getOwnPropertyNames from 'get-own-property-names-x';
 import isSymbol from 'is-symbol';
 import isBigint from 'is-bigint';
-/** @type {NumberConstructor} */
-
-var castNumber = 0 .constructor;
+import toNumber from 'to-number-x';
 var RX_NAMES = /^([A-Z][a-z]+)+$/;
 var rxTest = RX_NAMES.test;
 var EMPTY_STRING = '';
@@ -142,7 +140,7 @@ export var formatWithOptions = function formatWithOptions(inspectOptions) {
                 } else if (isSymbol(tempNum)) {
                   tempStr = 'NaN';
                 } else {
-                  tempStr = formatNumber(stylizeNoColor, castNumber(tempNum));
+                  tempStr = formatNumber(stylizeNoColor, toNumber(tempNum));
                 }
               }
               break;

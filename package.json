@@ -59,7 +59,8 @@
     "is-symbol": "^1.0.2",
     "json3": "^3.3.3",
     "parse-int-x": "^3.0.25",
-    "same-value-x": "^2.0.28"
+    "same-value-x": "^2.0.28",
+    "to-number-x": "^3.0.28"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
