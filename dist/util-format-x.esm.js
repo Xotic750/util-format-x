@@ -17,6 +17,7 @@ import getOwnPropertyNames from 'get-own-property-names-x';
 import isSymbol from 'is-symbol';
 import isBigint from 'is-bigint';
 import toNumber from 'to-number-x';
+import slice from 'array-slice-x';
 var RX_NAMES = /^([A-Z][a-z]+)+$/;
 var rxTest = RX_NAMES.test;
 var EMPTY_STRING = '';
@@ -30,20 +31,24 @@ var firstErrorLine = function firstErrorLine(error) {
 
 var CIRCULAR_ERROR_MESSAGE;
 
+var populateMessage = function populateMessage() {
+  // Populate the circular error message lazily
+  if (!CIRCULAR_ERROR_MESSAGE) {
+    try {
+      var a = {};
+      a.a = a;
+      stringify(a);
+    } catch (e) {
+      CIRCULAR_ERROR_MESSAGE = e.message;
+    }
+  }
+};
+
 var tryStringify = function tryStringify(arg) {
   try {
     return stringify(arg);
   } catch (err) {
-    // Populate the circular error message lazily
-    if (!CIRCULAR_ERROR_MESSAGE) {
-      try {
-        var a = {};
-        a.a = a;
-        stringify(a);
-      } catch (e) {
-        CIRCULAR_ERROR_MESSAGE = e.message;
-      }
-    }
+    populateMessage();
 
     if (err.name === 'TypeError' && firstErrorLine(err) === CIRCULAR_ERROR_MESSAGE) {
       return '[Circular]';
@@ -68,14 +73,14 @@ var stylizeNoColor = function stylizeNoColor(str) {
   return str;
 };
 
-export var formatWithOptions = function formatWithOptions(inspectOptions) {
-  var first = arguments.length <= 1 ? undefined : arguments[1];
+export var formatWithOptions = function formatWithOptions(inspectOptions, args) {
+  var first = args[0];
   var a = 0;
   var str = EMPTY_STRING;
   var join = EMPTY_STRING;
 
   if (typeof first === 'string') {
-    if ((arguments.length <= 1 ? 0 : arguments.length - 1) === 1) {
+    if (args.length === 1) {
       return first;
     }
 
@@ -88,13 +93,13 @@ export var formatWithOptions = function formatWithOptions(inspectOptions) {
         i += 1;
         var nextChar = charCodeAt.call(first, i);
 
-        if (a + 1 !== (arguments.length <= 1 ? 0 : arguments.length - 1)) {
+        if (a + 1 !== args.length) {
           switch (nextChar) {
             case 115:
               // 's'
               a += 1;
               {
-                var tempArg = a + 1 < 1 || arguments.length <= a + 1 ? undefined : arguments[a + 1];
+                var tempArg = args[a];
 
                 if (typeof tempArg === 'number') {
                   tempStr = formatNumber(stylizeNoColor, tempArg);
@@ -126,14 +131,14 @@ export var formatWithOptions = function formatWithOptions(inspectOptions) {
             case 106:
               // 'j'
               a += 1;
-              tempStr = tryStringify(a + 1 < 1 || arguments.length <= a + 1 ? undefined : arguments[a + 1]);
+              tempStr = tryStringify(args[a]);
               break;
 
             case 100:
               // 'd'
               a += 1;
               {
-                var tempNum = a + 1 < 1 || arguments.length <= a + 1 ? undefined : arguments[a + 1];
+                var tempNum = args[a];
 
                 if (isBigint(tempNum)) {
                   tempStr = "".concat(tempNum, "n");
@@ -148,13 +153,13 @@ export var formatWithOptions = function formatWithOptions(inspectOptions) {
             case 79:
               // 'O'
               a += 1;
-              tempStr = inspect(a + 1 < 1 || arguments.length <= a + 1 ? undefined : arguments[a + 1], inspectOptions);
+              tempStr = inspect(args[a], inspectOptions);
               break;
 
             case 111:
               // 'o'
               a += 1;
-              tempStr = inspect(a + 1 < 1 || arguments.length <= a + 1 ? undefined : arguments[a + 1], _objectSpread({}, inspectOptions, {
+              tempStr = inspect(args[a], _objectSpread({}, inspectOptions, {
                 showHidden: true,
                 showProxy: true,
                 depth: 4
@@ -165,7 +170,7 @@ export var formatWithOptions = function formatWithOptions(inspectOptions) {
               // 'i'
               a += 1;
               {
-                var tempInteger = a + 1 < 1 || arguments.length <= a + 1 ? undefined : arguments[a + 1];
+                var tempInteger = args[a];
 
                 if (isBigint(tempInteger)) {
                   tempStr = "".concat(tempInteger, "n");
@@ -181,7 +186,7 @@ export var formatWithOptions = function formatWithOptions(inspectOptions) {
               // 'f'
               a += 1;
               {
-                var tempFloat = a + 1 < 1 || arguments.length <= a + 1 ? undefined : arguments[a + 1];
+                var tempFloat = args[a];
 
                 if (isSymbol(tempFloat)) {
                   tempStr = 'NaN';
@@ -229,8 +234,8 @@ export var formatWithOptions = function formatWithOptions(inspectOptions) {
     }
   }
 
-  while (a < (arguments.length <= 1 ? 0 : arguments.length - 1)) {
-    var value = a + 1 < 1 || arguments.length <= a + 1 ? undefined : arguments[a + 1];
+  while (a < args.length) {
+    var value = args[a];
     str += join;
     str += typeof value !== 'string' ? inspect(value, inspectOptions) : value;
     join = ' ';
@@ -256,12 +261,8 @@ export var formatWithOptions = function formatWithOptions(inspectOptions) {
 // eslint-enable jsdoc/check-param-names
 
 export var format = function format() {
-  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
-  /* eslint-disable-next-line no-void */
-  return formatWithOptions.apply(void 0, [void 0].concat(args));
+  /* eslint-disable-next-line no-void,prefer-rest-params */
+  return formatWithOptions(void 0, slice(arguments));
 };
 
 //# sourceMappingURL=util-format-x.esm.js.map

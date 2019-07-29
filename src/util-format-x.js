@@ -9,6 +9,7 @@ import getOwnPropertyNames from 'get-own-property-names-x';
 import isSymbol from 'is-symbol';
 import isBigint from 'is-bigint';
 import toNumber from 'to-number-x';
+import slice from 'array-slice-x';
 
 const RX_NAMES = /^([A-Z][a-z]+)+$/;
 const rxTest = RX_NAMES.test;
@@ -22,20 +23,25 @@ const firstErrorLine = function firstErrorLine(error) {
 };
 
 let CIRCULAR_ERROR_MESSAGE;
+
+const populateMessage = function populateMessage() {
+  // Populate the circular error message lazily
+  if (!CIRCULAR_ERROR_MESSAGE) {
+    try {
+      const a = {};
+      a.a = a;
+      stringify(a);
+    } catch (e) {
+      CIRCULAR_ERROR_MESSAGE = e.message;
+    }
+  }
+};
+
 const tryStringify = function tryStringify(arg) {
   try {
     return stringify(arg);
   } catch (err) {
-    // Populate the circular error message lazily
-    if (!CIRCULAR_ERROR_MESSAGE) {
-      try {
-        const a = {};
-        a.a = a;
-        stringify(a);
-      } catch (e) {
-        CIRCULAR_ERROR_MESSAGE = e.message;
-      }
-    }
+    populateMessage();
 
     if (err.name === 'TypeError' && firstErrorLine(err) === CIRCULAR_ERROR_MESSAGE) {
       return '[Circular]';
@@ -60,7 +66,7 @@ const stylizeNoColor = function stylizeNoColor(str) {
   return str;
 };
 
-export const formatWithOptions = function formatWithOptions(inspectOptions, ...args) {
+export const formatWithOptions = function formatWithOptions(inspectOptions, args) {
   const first = args[0];
   let a = 0;
   let str = EMPTY_STRING;
@@ -253,7 +259,7 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, ...a
  * @returns {*} The target.
  */
 // eslint-enable jsdoc/check-param-names
-export const format = function format(...args) {
-  /* eslint-disable-next-line no-void */
-  return formatWithOptions(void 0, ...args);
+export const format = function format() {
+  /* eslint-disable-next-line no-void,prefer-rest-params */
+  return formatWithOptions(void 0, slice(arguments));
 };

@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "array-filter-x": "^3.0.19",
+    "array-slice-x": "^4.0.25",
     "collections-x": "^3.0.12",
     "get-own-property-names-x": "^3.0.11",
     "has-own-property-x": "^4.0.16",
