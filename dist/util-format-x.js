@@ -2,11 +2,11 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-07-29T15:45:52.221Z",
+  "date": "2019-07-29T20:13:45.334Z",
   "describe": "",
   "description": "An implementation of node's util.format and util.formatWithOptions",
   "file": "util-format-x.js",
-  "hash": "b93327fdc0398b972e74",
+  "hash": "cc59b254e0d0ef5c19ba",
   "license": "MIT",
   "version": "3.0.9"
 }
@@ -20,7 +20,7 @@
 		exports["utilFormatX"] = factory();
 	else
 		root["utilFormatX"] = factory();
-})((function() {
+})((function () {
   'use strict';
 
   if (typeof self !== 'undefined') {
