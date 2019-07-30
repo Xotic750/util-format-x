@@ -1,9 +1,3 @@
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 import inspect from 'inspect-x';
@@ -17,13 +11,18 @@ import getOwnPropertyNames from 'get-own-property-names-x';
 import isSymbol from 'is-symbol';
 import isBigint from 'is-bigint';
 import toNumber from 'to-number-x';
-import slice from 'array-slice-x';
+import attempt from 'attempt-x';
+import toStr from 'to-string-symbols-supported-x';
+import assign from 'object-assign-x';
+/* eslint-disable-next-line no-void */
+
+var UNDEFINED = void 0;
 var RX_NAMES = /^([A-Z][a-z]+)+$/;
 var rxTest = RX_NAMES.test;
 var EMPTY_STRING = '';
-var stringSplit = EMPTY_STRING.split;
-var stringSlice = EMPTY_STRING.slice;
-var charCodeAt = EMPTY_STRING.charCodeAt;
+var stringSplit = EMPTY_STRING.split,
+    stringSlice = EMPTY_STRING.slice,
+    charCodeAt = EMPTY_STRING.charCodeAt;
 
 var firstErrorLine = function firstErrorLine(error) {
   return stringSplit.call(error.message, '\n')[0];
@@ -34,21 +33,23 @@ var CIRCULAR_ERROR_MESSAGE;
 var populateMessage = function populateMessage() {
   // Populate the circular error message lazily
   if (!CIRCULAR_ERROR_MESSAGE) {
-    try {
+    var res = attempt(function attemptee() {
       var a = {};
       a.a = a;
       stringify(a);
-    } catch (e) {
-      CIRCULAR_ERROR_MESSAGE = e.message;
-    }
+    });
+    CIRCULAR_ERROR_MESSAGE = res.value.message;
   }
 };
 
 var tryStringify = function tryStringify(arg) {
-  try {
+  var res = attempt(function attemptee() {
     return stringify(arg);
-  } catch (err) {
+  });
+
+  if (res.threw) {
     populateMessage();
+    var err = res.value;
 
     if (err.name === 'TypeError' && firstErrorLine(err) === CIRCULAR_ERROR_MESSAGE) {
       return '[Circular]';
@@ -56,6 +57,8 @@ var tryStringify = function tryStringify(arg) {
 
     throw err;
   }
+
+  return res.value;
 };
 
 var matchNames = function matchNames(e) {
@@ -108,16 +111,15 @@ export var formatWithOptions = function formatWithOptions(inspectOptions, args) 
                   if (typeof tempArg === 'bigint') {
                     tempStr = "".concat(tempArg, "n");
                   } else {
-                    /* eslint-disable-next-line no-void */
-                    var constr = _typeof(tempArg) === 'object' && tempArg !== null ? tempArg.constructor : void 0; // noinspection JSObjectNullOrUndefined
+                    var constr = _typeof(tempArg) === 'object' && tempArg !== null ? tempArg.constructor : UNDEFINED; // noinspection JSObjectNullOrUndefined
 
                     if (!constr || typeof tempArg.toString === 'function' && ( // A direct own property.
                     hasOwnProperty(tempArg, 'toString') || // A direct own property on the constructor prototype in
                     // case the constructor is not an built-in object.
                     !builtInObjects.has(constr.name) && constr.prototype && hasOwnProperty(constr.prototype, 'toString'))) {
-                      tempStr = String(tempArg);
+                      tempStr = toStr(tempArg);
                     } else {
-                      tempStr = inspect(tempArg, _objectSpread({}, inspectOptions, {
+                      tempStr = inspect(tempArg, assign({}, inspectOptions, {
                         compact: 3,
                         colors: false,
                         depth: 0
@@ -159,7 +161,7 @@ export var formatWithOptions = function formatWithOptions(inspectOptions, args) 
             case 111:
               // 'o'
               a += 1;
-              tempStr = inspect(args[a], _objectSpread({}, inspectOptions, {
+              tempStr = inspect(args[a], assign({}, inspectOptions, {
                 showHidden: true,
                 showProxy: true,
                 depth: 4
@@ -261,8 +263,8 @@ export var formatWithOptions = function formatWithOptions(inspectOptions, args) 
 // eslint-enable jsdoc/check-param-names
 
 export var format = function format() {
-  /* eslint-disable-next-line no-void,prefer-rest-params */
-  return formatWithOptions(void 0, slice(arguments));
+  /* eslint-disable-next-line prefer-rest-params */
+  return formatWithOptions(UNDEFINED, arguments);
 };
 
 //# sourceMappingURL=util-format-x.esm.js.map

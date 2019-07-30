@@ -9,14 +9,16 @@ import getOwnPropertyNames from 'get-own-property-names-x';
 import isSymbol from 'is-symbol';
 import isBigint from 'is-bigint';
 import toNumber from 'to-number-x';
-import slice from 'array-slice-x';
+import attempt from 'attempt-x';
+import toStr from 'to-string-symbols-supported-x';
+import assign from 'object-assign-x';
 
+/* eslint-disable-next-line no-void */
+const UNDEFINED = void 0;
 const RX_NAMES = /^([A-Z][a-z]+)+$/;
 const rxTest = RX_NAMES.test;
 const EMPTY_STRING = '';
-const stringSplit = EMPTY_STRING.split;
-const stringSlice = EMPTY_STRING.slice;
-const {charCodeAt} = EMPTY_STRING;
+const {split: stringSplit, slice: stringSlice, charCodeAt} = EMPTY_STRING;
 
 const firstErrorLine = function firstErrorLine(error) {
   return stringSplit.call(error.message, '\n')[0];
@@ -27,21 +29,24 @@ let CIRCULAR_ERROR_MESSAGE;
 const populateMessage = function populateMessage() {
   // Populate the circular error message lazily
   if (!CIRCULAR_ERROR_MESSAGE) {
-    try {
+    const res = attempt(function attemptee() {
       const a = {};
       a.a = a;
       stringify(a);
-    } catch (e) {
-      CIRCULAR_ERROR_MESSAGE = e.message;
-    }
+    });
+
+    CIRCULAR_ERROR_MESSAGE = res.value.message;
   }
 };
 
 const tryStringify = function tryStringify(arg) {
-  try {
+  const res = attempt(function attemptee() {
     return stringify(arg);
-  } catch (err) {
+  });
+
+  if (res.threw) {
     populateMessage();
+    const err = res.value;
 
     if (err.name === 'TypeError' && firstErrorLine(err) === CIRCULAR_ERROR_MESSAGE) {
       return '[Circular]';
@@ -49,6 +54,8 @@ const tryStringify = function tryStringify(arg) {
 
     throw err;
   }
+
+  return res.value;
 };
 
 const matchNames = function matchNames(e) {
@@ -100,8 +107,7 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
                   if (typeof tempArg === 'bigint') {
                     tempStr = `${tempArg}n`;
                   } else {
-                    /* eslint-disable-next-line no-void */
-                    const constr = typeof tempArg === 'object' && tempArg !== null ? tempArg.constructor : void 0;
+                    const constr = typeof tempArg === 'object' && tempArg !== null ? tempArg.constructor : UNDEFINED;
 
                     // noinspection JSObjectNullOrUndefined
                     if (
@@ -113,14 +119,9 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
                           // case the constructor is not an built-in object.
                           (!builtInObjects.has(constr.name) && constr.prototype && hasOwnProperty(constr.prototype, 'toString'))))
                     ) {
-                      tempStr = String(tempArg);
+                      tempStr = toStr(tempArg);
                     } else {
-                      tempStr = inspect(tempArg, {
-                        ...inspectOptions,
-                        compact: 3,
-                        colors: false,
-                        depth: 0,
-                      });
+                      tempStr = inspect(tempArg, assign({}, inspectOptions, {compact: 3, colors: false, depth: 0}));
                     }
                   }
                 }
@@ -159,12 +160,7 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
             case 111:
               // 'o'
               a += 1;
-              tempStr = inspect(args[a], {
-                ...inspectOptions,
-                showHidden: true,
-                showProxy: true,
-                depth: 4,
-              });
+              tempStr = inspect(args[a], assign({}, inspectOptions, {showHidden: true, showProxy: true, depth: 4}));
 
               break;
 
@@ -260,6 +256,6 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
  */
 // eslint-enable jsdoc/check-param-names
 export const format = function format() {
-  /* eslint-disable-next-line no-void,prefer-rest-params */
-  return formatWithOptions(void 0, slice(arguments));
+  /* eslint-disable-next-line prefer-rest-params */
+  return formatWithOptions(UNDEFINED, arguments);
 };
