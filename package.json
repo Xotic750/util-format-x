@@ -1,6 +1,6 @@
 {
   "name": "util-format-x",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "description": "An implementation of node's util.format and util.formatWithOptions",
   "homepage": "https://github.com/Xotic750/util-format-x",
   "author": {
@@ -50,20 +50,20 @@
     "url": "https://github.com/Xotic750/util-format-x/issues"
   },
   "dependencies": {
-    "array-filter-x": "^3.0.19",
-    "attempt-x": "^2.0.22",
-    "collections-x": "^3.0.12",
-    "get-own-property-names-x": "^3.0.11",
-    "has-own-property-x": "^4.0.16",
-    "inspect-x": "^3.0.11",
+    "array-filter-x": "^3.0.20",
+    "attempt-x": "^2.0.23",
+    "collections-x": "^3.0.13",
+    "get-own-property-names-x": "^3.0.12",
+    "has-own-property-x": "^4.0.17",
+    "inspect-x": "^3.0.12",
     "is-bigint": "^1.0.0",
     "is-symbol": "^1.0.2",
     "json3": "^3.3.3",
-    "object-assign-x": "^2.0.11",
-    "parse-int-x": "^3.0.25",
-    "same-value-x": "^2.0.28",
-    "to-number-x": "^3.0.28",
-    "to-string-symbols-supported-x": "^2.0.21"
+    "object-assign-x": "^2.0.12",
+    "parse-int-x": "^3.0.26",
+    "same-value-x": "^2.0.29",
+    "to-number-x": "^3.0.29",
+    "to-string-symbols-supported-x": "^2.0.22"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -75,7 +75,7 @@
     "@babel/runtime": "^7.5.5",
     "@types/jest": "^24.0.16",
     "@types/node": "^12.6.8",
-    "@xotic750/eslint-config-recommended": "^1.0.4",
+    "@xotic750/eslint-config-recommended": "^1.0.5",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.6",
