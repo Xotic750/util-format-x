@@ -52,7 +52,7 @@
   "dependencies": {
     "array-filter-x": "^3.0.20",
     "attempt-x": "^2.0.23",
-    "collections-x": "^3.0.13",
+    "collections-x": "^3.0.14",
     "get-own-property-names-x": "^3.0.12",
     "has-own-property-x": "^4.0.17",
     "inspect-x": "^3.0.12",
