@@ -20,12 +20,12 @@ var UNDEFINED = void 0;
 var RX_NAMES = /^([A-Z][a-z]+)+$/;
 var rxTest = RX_NAMES.test;
 var EMPTY_STRING = '';
-var stringSplit = EMPTY_STRING.split,
+var split = EMPTY_STRING.split,
     stringSlice = EMPTY_STRING.slice,
     charCodeAt = EMPTY_STRING.charCodeAt;
 
 var firstErrorLine = function firstErrorLine(error) {
-  return stringSplit.call(error.message, '\n')[0];
+  return split.call(error.message, '\n')[0];
 };
 
 var CIRCULAR_ERROR_MESSAGE;
@@ -38,7 +38,7 @@ var populateMessage = function populateMessage() {
       a.a = a;
       stringify(a);
     });
-    CIRCULAR_ERROR_MESSAGE = res.value.message;
+    CIRCULAR_ERROR_MESSAGE = firstErrorLine(res.value);
   }
 };
 

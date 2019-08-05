@@ -18,10 +18,10 @@ const UNDEFINED = void 0;
 const RX_NAMES = /^([A-Z][a-z]+)+$/;
 const rxTest = RX_NAMES.test;
 const EMPTY_STRING = '';
-const {split: stringSplit, slice: stringSlice, charCodeAt} = EMPTY_STRING;
+const {split, slice: stringSlice, charCodeAt} = EMPTY_STRING;
 
 const firstErrorLine = function firstErrorLine(error) {
-  return stringSplit.call(error.message, '\n')[0];
+  return split.call(error.message, '\n')[0];
 };
 
 let CIRCULAR_ERROR_MESSAGE;
@@ -35,7 +35,7 @@ const populateMessage = function populateMessage() {
       stringify(a);
     });
 
-    CIRCULAR_ERROR_MESSAGE = res.value.message;
+    CIRCULAR_ERROR_MESSAGE = firstErrorLine(res.value);
   }
 };
 

@@ -2,11 +2,11 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-08-05T21:48:39.445Z",
+  "date": "2019-08-05T23:05:10.281Z",
   "describe": "",
   "description": "An implementation of node's util.format and util.formatWithOptions",
   "file": "util-format-x.js",
-  "hash": "033074461be3be21bb70",
+  "hash": "5f4cbaad4442e07caf55",
   "license": "MIT",
   "version": "3.0.13"
 }
@@ -11118,12 +11118,12 @@ var UNDEFINED = void 0;
 var RX_NAMES = /^([A-Z][a-z]+)+$/;
 var rxTest = RX_NAMES.test;
 var EMPTY_STRING = '';
-var stringSplit = EMPTY_STRING.split,
+var split = EMPTY_STRING.split,
     stringSlice = EMPTY_STRING.slice,
     charCodeAt = EMPTY_STRING.charCodeAt;
 
 var firstErrorLine = function firstErrorLine(error) {
-  return stringSplit.call(error.message, '\n')[0];
+  return split.call(error.message, '\n')[0];
 };
 
 var CIRCULAR_ERROR_MESSAGE;
@@ -11136,7 +11136,7 @@ var populateMessage = function populateMessage() {
       a.a = a;
       Object(json3__WEBPACK_IMPORTED_MODULE_4__["stringify"])(a);
     });
-    CIRCULAR_ERROR_MESSAGE = res.value.message;
+    CIRCULAR_ERROR_MESSAGE = firstErrorLine(res.value);
   }
 };
 
