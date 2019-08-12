@@ -107,7 +107,7 @@ export var formatWithOptions = function formatWithOptions(inspectOptions, args) 
                 if (typeof tempArg === 'number') {
                   tempStr = formatNumber(stylizeNoColor, tempArg);
                 } else {
-                  /* eslint-disable-next-line valid-typeof,no-lonely-if */
+                  /* eslint-disable-next-line no-lonely-if */
                   if (typeof tempArg === 'bigint') {
                     tempStr = "".concat(tempArg, "n");
                   } else {

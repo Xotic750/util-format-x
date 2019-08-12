@@ -2,11 +2,11 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-08-07T22:55:35.192Z",
+  "date": "2019-08-12T23:07:10.315Z",
   "describe": "",
   "description": "An implementation of node's util.format and util.formatWithOptions",
   "file": "util-format-x.js",
-  "hash": "5f4cbaad4442e07caf55",
+  "hash": "317af78241e7cf4903ab",
   "license": "MIT",
   "version": "3.0.13"
 }
@@ -11205,7 +11205,7 @@ var formatWithOptions = function formatWithOptions(inspectOptions, args) {
                 if (typeof tempArg === 'number') {
                   tempStr = formatNumber(stylizeNoColor, tempArg);
                 } else {
-                  /* eslint-disable-next-line valid-typeof,no-lonely-if */
+                  /* eslint-disable-next-line no-lonely-if */
                   if (typeof tempArg === 'bigint') {
                     tempStr = "".concat(tempArg, "n");
                   } else {

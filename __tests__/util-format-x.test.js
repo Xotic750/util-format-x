@@ -3,7 +3,7 @@ import {format} from '../src/util-format-x';
 const hasSymbolSupport = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
 const itHasSymbolSupport = hasSymbolSupport ? it : xit;
 
-/* eslint-disable-next-line babel/new-cap,no-undef,valid-typeof */
+/* eslint-disable-next-line babel/new-cap,no-undef */
 const hasBigIntSupport = typeof BigInt === 'function' && typeof BigInt(48) === 'bigint';
 const itHasBigIntlSupport = hasBigIntSupport ? it : xit;
 
