@@ -33,7 +33,7 @@ describe('format', function() {
   });
 
   itHasSymbolSupport('Symbol', function() {
-    expect.assertions(4);
+    expect.assertions(7);
     const symbol = Symbol('foo');
 
     // ES6 Symbol handling
@@ -41,11 +41,13 @@ describe('format', function() {
     expect(format('foo', symbol)).toBe('foo Symbol(foo)');
     expect(format('%s', symbol)).toBe('Symbol(foo)');
     expect(format('%j', symbol)).toBe('undefined');
-    // expect(format('%d', symbol)).toBe('NaN');
+    expect(format('%f', symbol)).toBe('NaN');
+    expect(format('%i', symbol)).toBe('NaN');
+    expect(format('%d', symbol)).toBe('NaN');
   });
 
   itHasBigIntlSupport('BigInt', function() {
-    expect.assertions(5);
+    expect.assertions(7);
     /* eslint-disable-next-line babel/new-cap,no-undef */
     const bigint = BigInt(48);
 
@@ -55,6 +57,8 @@ describe('format', function() {
     expect(() => {
       format('%j', bigint);
     }).toThrowErrorMatchingSnapshot();
+    expect(format('%f', bigint)).toBe('48n');
+    expect(format('%i', bigint)).toBe('48n');
     expect(format('%d', bigint)).toBe('48n');
   });
 
@@ -102,7 +106,7 @@ describe('format', function() {
   });
 
   it('string', function() {
-    expect.assertions(7); // String format specifier
+    expect.assertions(8); // String format specifier
     expect(format('%s')).toBe('%s');
     expect(format('%s', undefined)).toBe('undefined');
     expect(format('%s', 'foo')).toBe('foo');
@@ -110,6 +114,13 @@ describe('format', function() {
     expect(format('%s', '42')).toBe('42');
     expect(format('%s %s', 42, 43)).toBe('42 43');
     expect(format('%s %s', 42)).toBe('42 %s');
+    const obj = {
+      a: 1,
+      b: 2,
+      toString: null,
+    };
+
+    expect(format('%s', obj)).toBe('{ a: 1, b: 2, toString: null }');
   });
 
   it('jSON', function() {
@@ -168,6 +179,67 @@ describe('format', function() {
     expect(function() {
       format('%j', p);
     }).toThrowErrorMatchingSnapshot(); // /^Error: Not a circular object but still not serializable$/
+  });
+
+  it('object specific %o', function() {
+    expect.assertions(8);
+    // Object format specifier
+    const obj = {
+      foo: 'bar',
+      foobar: 1,
+      func() {},
+    };
+
+    const nestedObj = {
+      foo: 'bar',
+      foobar: {
+        foo: 'bar',
+        func() {},
+      },
+    };
+
+    const nestedObj2 = {
+      foo: 'bar',
+      foobar: 1,
+      func: [{a() {}}],
+    };
+
+    expect(format('%o')).toBe('%o');
+    expect(format('%o', 42)).toBe('42');
+    expect(format('%o', 'foo')).toBe("'foo'");
+    expect(format('%o', obj)).toMatchSnapshot();
+    expect(format('%o', nestedObj2)).toMatchSnapshot();
+    expect(format('%o', nestedObj)).toMatchSnapshot();
+    expect(format('%o %o', obj, obj)).toMatchSnapshot();
+    expect(format('%o %o', obj)).toMatchSnapshot();
+  });
+
+  it('object specific %O', function() {
+    expect.assertions(7);
+    // Object format specifier
+    const obj = {
+      foo: 'bar',
+      foobar: 1,
+      func() {},
+    };
+
+    const nestedObj = {
+      foo: 'bar',
+      foobar: {
+        foo: 'bar',
+        func() {},
+      },
+    };
+
+    expect(format('%O')).toBe('%O');
+    expect(format('%O', 42)).toBe('42');
+    expect(format('%O', 'foo')).toBe("'foo'");
+    expect(format('%O', obj)).toBe("{ foo: 'bar', foobar: 1, func: [Function: func] }");
+    expect(format('%O', nestedObj)).toBe("{ foo: 'bar', foobar: { foo: 'bar', func: [Function: func] } }");
+    expect(format('%O %O', obj, obj)).toBe(
+      "{ foo: 'bar', foobar: 1, func: [Function: func] } { foo: 'bar', foobar: 1, func: [Function: func] }",
+    );
+    expect(format('%O %O', obj)).toBe("{ foo: 'bar', foobar: 1, func: [Function: func] } %O");
   });
 
   /*

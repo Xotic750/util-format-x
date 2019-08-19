@@ -12,16 +12,19 @@ import toNumber from 'to-number-x';
 import attempt from 'attempt-x';
 import toStr from 'to-string-symbols-supported-x';
 import assign from 'object-assign-x';
+import methodize from 'simple-methodize-x';
 
 /* eslint-disable-next-line no-void */
 const UNDEFINED = void 0;
 const RX_NAMES = /^([A-Z][a-z]+)+$/;
-const rxTest = RX_NAMES.test;
+const rxTest = methodize(RX_NAMES.test);
 const EMPTY_STRING = '';
-const {split, slice: stringSlice, charCodeAt} = EMPTY_STRING;
+const split = methodize(EMPTY_STRING.split);
+const stringSlice = methodize(EMPTY_STRING.slice);
+const charCodeAt = methodize(EMPTY_STRING.charCodeAt);
 
 const firstErrorLine = function firstErrorLine(error) {
-  return split.call(error.message, '\n')[0];
+  return split(error.message, '\n')[0];
 };
 
 let CIRCULAR_ERROR_MESSAGE;
@@ -59,7 +62,7 @@ const tryStringify = function tryStringify(arg) {
 };
 
 const matchNames = function matchNames(e) {
-  return rxTest.call(RX_NAMES, e);
+  return rxTest(RX_NAMES, e);
 };
 
 const builtInObjects = new SetConstructor(arrayFilter(getOwnPropertyNames(global), matchNames));
@@ -88,10 +91,10 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
     let lastPos = 0;
 
     for (let i = 0; i < first.length - 1; i += 1) {
-      if (charCodeAt.call(first, i) === 37) {
+      if (charCodeAt(first, i) === 37) {
         // '%'
         i += 1;
-        const nextChar = charCodeAt.call(first, i);
+        const nextChar = charCodeAt(first, i);
 
         if (a + 1 !== args.length) {
           switch (nextChar) {
@@ -185,7 +188,9 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
               {
                 const tempFloat = args[a];
 
-                if (isSymbol(tempFloat)) {
+                if (isBigint(tempFloat)) {
+                  tempStr = `${tempFloat}n`;
+                } else if (isSymbol(tempFloat)) {
                   tempStr = 'NaN';
                 } else {
                   tempStr = formatNumber(stylizeNoColor, parseFloat(tempFloat));
@@ -195,7 +200,7 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
               break;
 
             case 37: // '%'
-              str += stringSlice.call(first, lastPos, i);
+              str += stringSlice(first, lastPos, i);
               lastPos = i + 1;
               /* eslint-disable-next-line no-continue */
               continue;
@@ -207,13 +212,13 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
           }
 
           if (lastPos !== i - 1) {
-            str += stringSlice.call(first, lastPos, i - 1);
+            str += stringSlice(first, lastPos, i - 1);
           }
 
           str += tempStr;
           lastPos = i + 1;
         } else if (nextChar === 37) {
-          str += stringSlice.call(first, lastPos, i);
+          str += stringSlice(first, lastPos, i);
           lastPos = i + 1;
         }
       }
@@ -224,7 +229,7 @@ export const formatWithOptions = function formatWithOptions(inspectOptions, args
       join = ' ';
 
       if (lastPos < first.length) {
-        str += stringSlice.call(first, lastPos);
+        str += stringSlice(first, lastPos);
       }
     }
   }

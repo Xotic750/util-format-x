@@ -3,3 +3,62 @@
 exports[`format BigInt 1`] = `"Do not know how to serialize a BigInt"`;
 
 exports[`format invalid 1`] = `"Not a circular object but still not serializable"`;
+
+exports[`format object specific %o 1`] = `
+"{ foo: 'bar',
+  foobar: 1,
+  func: 
+   { [Function: func]
+     [length]: 0,
+     [name]: 'func',
+     [prototype]: func { [constructor]: [Circular] } } }"
+`;
+
+exports[`format object specific %o 2`] = `
+"{ foo: 'bar',
+  foobar: 1,
+  func: 
+   [ { a: 
+        { [Function: a]
+          [length]: 0,
+          [name]: 'a',
+          [prototype]: a { [constructor]: [Object] } } },
+     [length]: 1 ] }"
+`;
+
+exports[`format object specific %o 3`] = `
+"{ foo: 'bar',
+  foobar: 
+   { foo: 'bar',
+     func: 
+      { [Function: func]
+        [length]: 0,
+        [name]: 'func',
+        [prototype]: func { [constructor]: [Circular] } } } }"
+`;
+
+exports[`format object specific %o 4`] = `
+"{ foo: 'bar',
+  foobar: 1,
+  func: 
+   { [Function: func]
+     [length]: 0,
+     [name]: 'func',
+     [prototype]: func { [constructor]: [Circular] } } } { foo: 'bar',
+  foobar: 1,
+  func: 
+   { [Function: func]
+     [length]: 0,
+     [name]: 'func',
+     [prototype]: func { [constructor]: [Circular] } } }"
+`;
+
+exports[`format object specific %o 5`] = `
+"{ foo: 'bar',
+  foobar: 1,
+  func: 
+   { [Function: func]
+     [length]: 0,
+     [name]: 'func',
+     [prototype]: func { [constructor]: [Circular] } } } %o"
+`;
