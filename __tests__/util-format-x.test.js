@@ -3,7 +3,6 @@ import {format} from '../src/util-format-x';
 const hasSymbolSupport = typeof Symbol === 'function' && typeof Symbol('') === 'symbol';
 const itHasSymbolSupport = hasSymbolSupport ? it : xit;
 
-/* eslint-disable-next-line babel/new-cap,no-undef */
 const hasBigIntSupport = typeof BigInt === 'function' && typeof BigInt(48) === 'bigint';
 const itHasBigIntlSupport = hasBigIntSupport ? it : xit;
 
@@ -48,7 +47,6 @@ describe('format', function() {
 
   itHasBigIntlSupport('BigInt', function() {
     expect.assertions(7);
-    /* eslint-disable-next-line babel/new-cap,no-undef */
     const bigint = BigInt(48);
 
     expect(format(bigint)).toBe('BigInt {}');

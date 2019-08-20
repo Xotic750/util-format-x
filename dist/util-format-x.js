@@ -2,7 +2,7 @@
 {
   "author": "Graham Fairweather",
   "copywrite": "Copyright (c) 2017",
-  "date": "2019-08-19T15:50:27.857Z",
+  "date": "2019-08-20T18:14:21.169Z",
   "describe": "",
   "description": "An implementation of node's util.format and util.formatWithOptions",
   "file": "util-format-x.js",
